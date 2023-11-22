@@ -15,6 +15,7 @@ import puppeteer, {Browser, Page } from "puppeteer";
 
   wss.on("connection", (ws:WebSocket) => {
     // note to self: send -> ws.send
+    var pixelSize = 1;
     console.log('HEY');
     ws.on("error", console.error);
     ws.on("message", async (m:any) => {
@@ -22,19 +23,27 @@ import puppeteer, {Browser, Page } from "puppeteer";
       const d = JSON.parse(m);
       console.log(d);
       switch (d.action) {
+        case "setMetadata":
+          pixelSize = d.pixelSize
+          ws.send(JSON.stringify({type:"setMetadata",value:true}));
+          break;
         case "goToUrl":
           await page.goto(d.url);
+          ws.send(JSON.stringify({type:"goToUrl",value:true}));
           break;
         case "screenshot":
-          const src = await screenshot(page);
-          ws.send(src.join(' ').replace(/ /g, ""));
+          const src = await screenshot(page,pixelSize);
+          ws.send(JSON.stringify({type:"screenshot",value:src.join(' ').replace(/ /g, "")}));
           break;
+        case "click":
+          await page.click(d.x,d.y);
+          ws.send(JSON.stringify({type:"click",value:true}))
       }
     });
   });
 })();
 
-async function screenshot(page:Page):Promise<string[]>{
+async function screenshot(page:Page,pixelSize:number = 1):Promise<string[]>{
   const screenshot = await page.screenshot();
-  return await scratchify(screenshot,0.25);
+  return await scratchify(screenshot,pixelSize);
 }
