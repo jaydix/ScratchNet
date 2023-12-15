@@ -40,6 +40,10 @@ import puppeteer, {Browser, Page } from "puppeteer";
           ws.send(JSON.stringify({type:"click",value:true}))
       }
     });
+    ws.on("close", () => {
+      console.log(`Client disconnected! lmao!`);
+      await browser.close();
+    });
   });
 })();
 
