@@ -4,16 +4,16 @@ import jimp from "jimp";
 import puppeteer, {Browser, Page } from "puppeteer";
 
 (async () => {
-  // i sure do love initializing websockets. and puppeteer
-  const wss = new WebSocketServer({ port: 8080 });
-  const browser = await puppeteer.launch({ headless: "new" });
-  const page = await browser.newPage();
-  await page.goto('https://google.com');
-  await page.setViewport({ width: 480*2, height: 360*2 });
   //const screenshot = await page.screenshot();
   //console.log(screenshot)
 
   wss.on("connection", (ws:WebSocket) => {
+    // i sure do love initializing websockets. and puppeteer
+    const wss = new WebSocketServer({ port: 8080 });
+    const browser = await puppeteer.launch({ headless: "new" });
+    const page = await browser.newPage();
+    await page.goto('https://google.com');
+    await page.setViewport({ width: 480*2, height: 360*2 });
     // note to self: send -> ws.send
     var pixelSize = 1;
     console.log('HEY');
