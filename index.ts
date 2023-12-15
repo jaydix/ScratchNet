@@ -4,12 +4,10 @@ import jimp from "jimp";
 import puppeteer, {Browser, Page } from "puppeteer";
 
 (async () => {
-  //const screenshot = await page.screenshot();
-  //console.log(screenshot)
+  const wss = new WebSocketServer({ port: 8080 });
 
   wss.on("connection", (ws:WebSocket) => {
-    // i sure do love initializing websockets. and puppeteer
-    const wss = new WebSocketServer({ port: 8080 });
+    // i sure do love initializing websockets. and puppeteeR
     const browser = await puppeteer.launch({ headless: "new" });
     const page = await browser.newPage();
     await page.goto('https://google.com');
